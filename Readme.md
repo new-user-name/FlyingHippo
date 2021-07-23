@@ -1,4 +1,4 @@
-# FlyingHippo
+﻿# FlyingHippo
 21 июля 2021</br>
 <b>Установка QT и QTcreator</b></br>
 На страницах QT</br>
@@ -32,15 +32,12 @@ gobject-2.0.lib;glib-2.0.lib;gstreamer-1.0.lib;kernel32.lib;user32.lib;gdi32.lib
 Там же Linker / All options, ставим "Ignore All Default Libraries" No.</br>
 Источник https://stackoverflow.com/questions/34572063/lnk2019unresolved-external-symbol-gstreamer-tutorials-visual-studio-2015</br>
 После этого первый пример запускается</br>
-Отвлекаемся на "транслятор пакетов", папка FpvMVS. Его можно было бы назвать плейером, но плейер "показывает картинку", а эта программа отправляет пакеты по UDP.
+Отвлекаемся на "транслятор пакетов", папка FpvMVS. Его можно было бы назвать плейером, но плейер "показывает картинку", а эта программа отправляет пакеты по UDP.</br>
 23 июля 2021</br>
-Сначала "транслятор" бsk написан по Linux на чистом С, эта версия под Windows. Что там от "++" -- не ясно.
+Сначала "транслятор" был написан по Linux на чистом С, эта версия под Windows. Что там от "++" -- не ясно. </br>
 ```    err = WSAStartup(wVersionRequested, &wsaData);
 
     udp = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
     int e = WSAGetLastError();
-    int g = setsockopt(udp, SOL_SOCKET, SO_BROADCAST, (const char*)&on, sizeof(on));```
-кусок, без которого под Windows не работает.
-
-
-
+    int g = setsockopt(udp, SOL_SOCKET, SO_BROADCAST, (const char*)&on, sizeof(on));``` </br>
+кусок, без которого под Windows не работает. Структура fpv занимает 17 байт, в первый подход с этим были проблемы.
