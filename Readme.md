@@ -32,19 +32,19 @@ https://download.qt.io/official_releases/qtcreator/4.15/4.15.1/
 
 5. Открываем проект, получивщийся в 3 пункте, в Visual studio (не в Qtcreator). Смотрим тут https://stackoverflow.com/questions/49294685/how-do-i-configure-visual-studio-2017-to-run-gstreamer-tutorials, как конфигурировать папки в свойствах проекта. Похоже, конфигурировать надо каждый проект отдельно, их там 14.
 
-  <b>x86_64 в путях меняем на msvc_x86_64</b>
+  <b>x86_64 в путях ниже меняем на msvc_x86_64</b>
 
   C/C++ -> Additional Include Directories ->
 
-  C:\gstreamer\1.0\msvc_x86_64\lib\glib-2.0\include;C:\gstreamer\1.0\msvc_x86_64\include\gstreamer-1.0;C:\gstreamer\1.0\msvc_x86_64\include\glib-2.0\;C:\gstreamer\1.0\msvc_x86_64\include\glib-2.0\glib;%(AdditionalIncludeDirectories)
+  `C:\gstreamer\1.0\msvc_x86_64\lib\glib-2.0\include;C:\gstreamer\1.0\msvc_x86_64\include\gstreamer-1.0;C:\gstreamer\1.0\msvc_x86_64\include\glib-2.0\;C:\gstreamer\1.0\msvc_x86_64\include\glib-2.0\glib;%(AdditionalIncludeDirectories)`
 
   Linker -> General -> Adding Library Directories ->
 
-  C:\gstreamer\1.0\msvc_x86_64\lib;%(AdditionalLibraryDirectories)
+  `C:\gstreamer\1.0\msvc_x86_64\lib;%(AdditionalLibraryDirectories)`
 
   Linker -> Input -> Additional Dependencies ->
 
-  gobject-2.0.lib;glib-2.0.lib;gstreamer-1.0.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)
+  `gobject-2.0.lib;glib-2.0.lib;gstreamer-1.0.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)`
 
   все или нет либы надо добавлять -- не ясно.
 
@@ -69,3 +69,59 @@ int e = WSAGetLastError();
 int g = setsockopt(udp, SOL_SOCKET, SO_BROADCAST, (const char*)&on, sizeof(on));
 ```
 кусок, без которого под Windows не работает. Структура fpv занимает 17 байт, в первый подход с этим были проблемы.
+
+Запускаем программу, появляется пустая консоль. Запускаем Wireshark, выбираем Loopback Adapter, видим пакеты. Пакетов должно быть много, идут непрерывно. Адреса, куда идут пакеты, и проигрываемый файл видны в тексте программы. Дальше пока ничего не делаем, возвращаемся к первому примеру Gstreamer (см. вчера).
+
+https://gstreamer.freedesktop.org/documentation/tutorials/basic/hello-world.html?gi-language=c
+
+Там всё объясняется, но надо прокомментировать.
+
+1) ```c
+   /* Initialize GStreamer */
+     gst_init (&argc, &argv);
+   ```
+
+тут что-то где-то взводится, в ООП-нотации было бы что-то типа Gstreamer gs = new Gstreamer(), соответственно всё происходящее было бы внутри объекта, а здесь оно происходит где-то.
+
+2. ```c
+     /* Build the pipeline */
+     pipeline =
+         gst_parse_launch
+         ("playbin uri=https://www.freedesktop.org/software/gstreamer-sdk/data/media/sintel_trailer-480p.webm",
+         NULL);
+   ```
+
+здесь взводятся, как ни странно, две переменные -- pipeline и playbin. В ООП был бы возврат тюпля методом (например), если надо сделать строго в одну строку, или что-то с out.
+
+3. ```c
+   /* Start playing */
+     gst_element_set_state (pipeline, GST_STATE_PLAYING);
+   ```
+
+В ООП было бы что-то типа gs.Play(pipeline), здесь же отдельная функция для изменения состояния, находится в глобальном пространстве имён, переключается ключом GST_STATE_PLAYING.
+
+4. ```c
+   bus = gst_element_get_bus (pipeline);
+   ```
+
+Скорее всего функция выше может упасть или закончиться, она что-то изменит в результате падения или окончания в pipeline, и новое сосотяния pipeline можно прожевать gst_element_get_bus.
+
+5. ```c
+   msg =
+         gst_bus_timed_pop_filtered (bus, GST_CLOCK_TIME_NONE,
+         GST_MESSAGE_ERROR | GST_MESSAGE_EOS);
+   ```
+
+Отдельная функция для получения сообщения.
+
+6. ```c
+   /* Free resources */
+     if (msg != NULL)
+       gst_message_unref (msg);
+     gst_object_unref (bus);
+     gst_element_set_state (pipeline, GST_STATE_NULL);
+     gst_object_unref (pipeline);
+     return 0;
+   ```
+
+Печатаем сообщение и освобождаем ресурсы.
