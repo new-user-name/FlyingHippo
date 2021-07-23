@@ -3,17 +3,20 @@
 
 ##### <b>Установка QT и QTcreator</b>
 
-На страницах QT
-https://www.qt.io/offline-installers
-легко перепутать QT и Qtcreator, следим за тем, что ставим.
+На страницах QT https://www.qt.io/offline-installers легко перепутать QT и Qtcreator, следим за тем, что ставим.
 
-Сначала QT:
+Сначала QT
+
 https://download.qt.io/official_releases/qt/5.12/5.12.11/qt-opensource-windows-x86-5.12.11.exe.mirrorlist
-версия 5.12.11,
-потом QTcreator
+
+версия 5.12.11, потом QTcreator
+
 https://www.qt.io/offline-installers
+
 ищем слева Qtcreator, справа появляется линк на загрузку IDE.
+
 https://download.qt.io/official_releases/qtcreator/4.15/4.15.1/
+
 Если где-то спросит, что качать -- качаем opensource. При установке выбираются компиляторы. Если надо потом добавить/убрать компиляторы, то надо сносить QTcreator и устанавливать заново. В корневом каталоге QtCreator есть Maintenance, но она не показывает, что стоит, и что-то мне не нравилось в ней, то ли нельзя убирать/добавить компиляторы, то ли что-то такое.
 
 Отвлекаемся от QT, <b>устанавливаем Gstreamer и примеры.</b></br>
