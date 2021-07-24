@@ -125,3 +125,36 @@ https://gstreamer.freedesktop.org/documentation/tutorials/basic/hello-world.html
    ```
 
 Печатаем сообщение и освобождаем ресурсы.
+
+###### 24 июля 2021 года
+
+Отвлекаемся от примеров Gstreamera и возвращаемся к связке "транслятор пакетов + плейер под Виндоус". Плейер запускается из Qtcreator, папка QFPV. Ищем gst-plugins-good, это набор плагинов для Gstreamera. Качаем его, но только ту версию, которая по номеру совпадает с версией самого Gstreamer. Лезем там в ext/qt, видим набор файлов, из них надо сделать dll, это будет нужный и пока отсутствующий плагин для Жстримера. 
+
+`C:\gstreamer\1.0\msvc_x86_64\bin` -- надо добавить в path.
+
+`C:\gstreamer\1.0\msvc_x86_64\` -- путь к самому Жстримеру, его надо дописать в pro файл в QTcreator.
+
+Полученную dll надо скопировать сюда
+
+`C:\gstreamer\1.0\msvc_x86_64\lib\gstreamer-1.0\`
+
+только один dll файл.
+
+Деталь про плагин: для Gstreamer есть "просмотрщик" установленных плагинов, но он не увидит этот плагин, даже если очистить кэш плагинов. Кэш плагинов сидит тут
+
+`C:\Users\user\AppData\Local\Microsoft\Windows\INetCache`
+
+ Цитата из моего поста на форуме:
+
+\`> gst-inspect-1.0 gstqmlgl.dll`
+
+`gives me` 
+
+`(gst-inspect-1.0:3360): GStreamer-WARNING **: 23:25:49.199: Failed to load plugin 'gstqmlgl.dll': 'gstqmlgl.dll': The specified module could not be found.`
+
+`Could not load plugin file: Opening module failed: 'gstqmlgl.dll': The specified module could not be found.`
+
+Но QFPV всё равно скомпилится. Запускаем его, запускаем транслятор и видим фильм в окне.
+
+Про вьюер пакетов
+https://stackoverflow.com/questions/36467649/whats-wrong-with-this-gstreamer-pipeline
