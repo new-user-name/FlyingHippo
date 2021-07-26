@@ -3,14 +3,14 @@
 
 Главные "потоки":
 
-1) [Установка QT и QTcreator](#Установка QT и QTcreator).
+1) [Установка QT и QTcreator](#-Установка-QT-и-QTcreator).
 2) Настройка Visual studio (2019).
 3) Запуск плейера под Windows.
 4) Запуск плейера под Андроид.
 5) Запуск плейера под iOs.
 6) Примеры Gstreamer.
 
-##### <a name="Установка QT и QTcreator">Установка QT и QTcreator</a>
+##### # Установка QT и QTcreator
 
 На страницах QT https://www.qt.io/offline-installers легко перепутать QT и Qtcreator, следим за тем, что ставим.
 
