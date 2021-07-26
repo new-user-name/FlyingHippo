@@ -1,9 +1,16 @@
 # FlyingHippo
 Документ ведётся в Typora, https://typora.io/.
 
-###### 21 июля 2021
+Главные "потоки":
 
-##### <b>Установка QT и QTcreator</b>
+1) [Установка QT и QTcreator](#Установка QT и QTcreator).
+2) Настройка Visual studio (2019).
+3) Запуск плейера под Windows.
+4) Запуск плейера под Андроид.
+5) Запуск плейера под iOs.
+6) Примеры Gstreamer.
+
+##### <a name="Установка QT и QTcreator">Установка QT и QTcreator</a>
 
 На страницах QT https://www.qt.io/offline-installers легко перепутать QT и Qtcreator, следим за тем, что ставим.
 
@@ -20,6 +27,8 @@ https://www.qt.io/offline-installers
 https://download.qt.io/official_releases/qtcreator/4.15/4.15.1/
 
 Если где-то спросит, что качать -- качаем opensource. При установке QT (не creator) выбираются компиляторы. Если надо потом добавить/убрать компиляторы, то надо сносить QTcreator и устанавливать заново. Есть MaintenanceTool в каталоге QT (не creator), но он не показывает, что стоит, во всяком случае не ясно, то ли добавлять отмеченные компоненты, то ли удалять, и надо отмечать какие-то "репозитории". Maintenance вызывается и при установке, если уже qt стоит (или криэйтор). При удалении через Revo uninstaller надо не вытереть случайно паки в Вайбере.
+
+
 
 Отвлекаемся от QT, <b>устанавливаем Gstreamer и примеры.</b>
 1. Сносим предыдущие инсталляции.
@@ -185,3 +194,26 @@ https://stackoverflow.com/questions/36467649/whats-wrong-with-this-gstreamer-pip
 
 Разбор второго примера.
 
+https://gstreamer.freedesktop.org/documentation/tutorials/basic/concepts.html?gi-language=c
+
+```c
+/* Create the elements */
+  source = gst_element_factory_make ("videotestsrc", "source");
+  sink = gst_element_factory_make ("autovideosink", "sink");
+```
+
+В обоих случаях первый аргумент -- тип создаваемого элемента, при этом он задаётся строкой. Как минимум тип можно было бы задать через Enum, но скорее всего через что-то типа Интерфейс `IElement`, например `IElement videotestsrc = new Videotestsrc()` , и у этого же объекта задать имя. Здесь же идёт простая свалка параметров, понятная только авторам.
+
+```c
+ /* Create the empty pipeline */
+  pipeline = gst_pipeline_new ("test-pipeline");
+```
+
+Этот приём я разбирал выше -- меняется какой-то глобал стейт, и снова вместо объекта конкретного типа передаётся "ключ" `test-pipeline`, по которому он где-то там создаётся. Дальше пихаем оба элемента в пайплайн и, как если бы этого было мало, их ещё надо соединить, что может и не получиться.
+
+```c
+/* Modify the source's properties */
+  g_object_set (source, "pattern", 0, NULL);
+```
+
+У элементов Жстримера есть геттеры и сеттеры, работают как вот такие вот "отдельные" функции. Дальше там проверка на ошибки, вроде всё понятно. Всё идёт прямо, никаких callbacks, но видео идёт в отдельном потоке, который говорит с Gstreamer bus. То есть создаём элементы, создаём пайплайн, пихаем элементы в пайплайн, связываем их, меняем стейт пайплайна и слушаем bus.
