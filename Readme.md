@@ -179,5 +179,5 @@ https://stackoverflow.com/questions/36467649/whats-wrong-with-this-gstreamer-pip
 
 Запускаем FpvMVS (см. 23 июня) из Visual Studio, потом QFPV из QTcreator. Видим окно с фильмом.
 
- **`![QFPV показывает фильм, транслируемый FpvMVS](../main/Images/QFPV_windows.png)`**
+ **`![QFPV показывает фильм, транслируемый FpvMVS](https://raw.githubusercontent.com/new-user-name/FlyingHippo/main/Images/QFPV_windows.png)`**
 
