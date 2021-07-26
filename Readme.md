@@ -30,9 +30,9 @@ https://download.qt.io/official_releases/qtcreator/4.15/4.15.1/
 
 4. Лезем в D:\CPP\gst-docs-master\examples\tutorials\vs2010\basic-tutorial-1, открываем там в блокноте файл vcxproj, ищем что-то, похожее на GSTREAMER_1_0_ROOT_X86_64, делаем переменную окружения с таким именем и значением C:\gstreamer\1.0\msvc_x86_64\. Зачем -- не ясно, но сделал.
 
-5. Открываем проект, получивщийся в 3 пункте, в Visual studio (не в Qtcreator). Смотрим тут https://stackoverflow.com/questions/49294685/how-do-i-configure-visual-studio-2017-to-run-gstreamer-tutorials, как конфигурировать папки в свойствах проекта. Похоже, конфигурировать надо каждый проект отдельно, их там 14.
+5. Открываем проект, получивщийся в 3 пункте, в Visual studio (не в Qtcreator). Смотрим тут https://stackoverflow.com/questions/49294685/how-do-i-configure-visual-studio-2017-to-run-gstreamer-tutorials, как конфигурировать папки в свойствах проекта. Похоже, конфигурировать надо каждый проект отдельно, их там 14 *[Да, но руками надо добавлять только propery sheet, см. 26 июля]*.
 
-  <b>x86_64 в путях ниже меняем на msvc_x86_64</b>
+*[Все настройки добавлять через property sheets, см. 26 июля после картинки]*
 
   C/C++ -> Additional Include Directories ->
 
@@ -81,7 +81,7 @@ https://gstreamer.freedesktop.org/documentation/tutorials/basic/hello-world.html
      gst_init (&argc, &argv);
    ```
 
-тут что-то где-то взводится, в ООП-нотации было бы что-то типа Gstreamer gs = new Gstreamer(), соответственно всё происходящее было бы внутри объекта, а здесь оно происходит где-то.
+тут что-то где-то взводится, в ООП-нотации было бы что-то типа `Gstreamer gs = new Gstreamer()`, соответственно всё происходящее было бы внутри объекта, а здесь оно происходит где-то.
 
 2. ```c
      /* Build the pipeline */
@@ -98,13 +98,13 @@ https://gstreamer.freedesktop.org/documentation/tutorials/basic/hello-world.html
      gst_element_set_state (pipeline, GST_STATE_PLAYING);
    ```
 
-В ООП было бы что-то типа gs.Play(pipeline), здесь же отдельная функция для изменения состояния, находится в глобальном пространстве имён, переключается ключом GST_STATE_PLAYING.
+В ООП было бы что-то типа `gs.Play(pipeline)`, здесь же отдельная функция для изменения состояния, находится в глобальном пространстве имён, переключается ключом `GST_STATE_PLAYING`.
 
 4. ```c
    bus = gst_element_get_bus (pipeline);
    ```
 
-Скорее всего функция выше может упасть или закончиться, она что-то изменит в результате падения или окончания в pipeline, и новое сосотяния pipeline можно прожевать gst_element_get_bus.
+Скорее всего функция выше может упасть или закончиться, она что-то изменит в результате падения или окончания в pipeline, и новое состояния pipeline можно прожевать `gst_element_get_bus`.
 
 5. ```c
    msg =
@@ -180,4 +180,8 @@ https://stackoverflow.com/questions/36467649/whats-wrong-with-this-gstreamer-pip
 Запускаем FpvMVS (см. 23 июня) из Visual Studio, потом QFPV из QTcreator. Видим окно с фильмом.
 
 ![QFPV показывает фильм, транслируемый FpvMVS](https://raw.githubusercontent.com/new-user-name/FlyingHippo/main/Images/QFPV_windows.png)
+
+Возвращаемся ко второму примеру Gstreamer (см. 23 июля). Туда надо каким-то образом экспортировать опции первого примера. В Студии `view/other views/Property manager`, там находим нужный конфиг, то есть `Debug|x64`, потом контекстное меню `add new project property sheet`, добавляем лист `Gstreamer`, смотрим его `properties` и добавляем туда руками всё из конфига 21 июля и начала 22 июля. Экспортировать как-то существующие настройки нельзя (наверное). Сохраняем. Гаечный ключ `Gstreamer` появляется в списке `sheets` самым верхним, т.е. он будет обрабатываться позже всех и иметь приоритет. Что в остальных листах -- не ясно. Теперь лезем на той же вкладке в `basic-tutorial-2` и добавляем `existing property sheet`, выбирая `Gstreamer`. После второй пример нормально билдится.
+
+Разбор второго примера.
 
