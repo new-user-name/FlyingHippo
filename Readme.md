@@ -10,7 +10,7 @@
 5) Запуск плейера под iOs.
 6) Примеры Gstreamer.
 
-##### # Установка QT и QTcreator
+##### Установка QT и QTcreator
 
 На страницах QT https://www.qt.io/offline-installers легко перепутать QT и Qtcreator, следим за тем, что ставим.
 
