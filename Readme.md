@@ -175,3 +175,9 @@ https://stackoverflow.com/questions/36467649/whats-wrong-with-this-gstreamer-pip
 
 Дальше решаем скомпилировать `D:\CPP\gst-plugins-good-1.18\ext\qt` как dll и перенести в каталог плагинов. Открываем в QTcreator .pro файл, меняем в нём `GSTREAMER_PATH=C:/gstreamer/1.0/msvc_x86_64` . После билда поднимаемся на один уровень выше, видим папку с длинным именем, в ней папка Debug. Там нам нужна только dll. Её копируем в `C:\gstreamer\1.0\msvc_x86_64\lib\gstreamer-1.0`. После копирования dll ошибка в qml файле проекта пропадает.
 
+###### 26 июля 2021 года
+
+Запускаем FpvMVS (см. 23 июня) из Visual Studio, потом QFPV из QTcreator. Видим окно с фильмом.
+
+ **`![QFPV показывает фильм, транслируемый FpvMVS](../main/Images/QFPV_windows.png)`**
+
