@@ -4,11 +4,11 @@
 Главные "потоки":
 
 1) [Установка QT и QTcreator](#Установка-QT-и-QTcreator).
-2) Настройка Visual studio (2019).
-3) Запуск плейера под Windows.
-4) Запуск плейера под Андроид.
-5) Запуск плейера под iOs.
-6) Примеры Gstreamer.
+2) [Примеры Gstreamer](#Примеры-Gstreamer).
+3) Настройка Visual studio (2019).
+4) Запуск плейера под Windows.
+5) Запуск плейера под Андроид.
+6) Запуск плейера под iOs.
 
 ##### Установка QT и QTcreator
 
@@ -28,38 +28,37 @@ https://download.qt.io/official_releases/qtcreator/4.15/4.15.1/
 
 Если где-то спросит, что качать -- качаем opensource. При установке QT (не creator) выбираются компиляторы. Если надо потом добавить/убрать компиляторы, то надо сносить QTcreator и устанавливать заново. Есть MaintenanceTool в каталоге QT (не creator), но он не показывает, что стоит, во всяком случае не ясно, то ли добавлять отмеченные компоненты, то ли удалять, и надо отмечать какие-то "репозитории". Maintenance вызывается и при установке, если уже qt стоит (или криэйтор). При удалении через Revo uninstaller надо не вытереть случайно паки в Вайбере.
 
+##### Примеры Gstreamer
 
-
-Отвлекаемся от QT, <b>устанавливаем Gstreamer и примеры.</b>
 1. Сносим предыдущие инсталляции.
 
-2. Ставим заново отсюда https://gstreamer.freedesktop.org/download/, MSVC 64-bit (VS 2019, Release CRT) оба варианта. При инсталляции нельзя выбирать full, потому что поставит неизвестно куда. Выбираем custom, выбираем путь (c:\gstreamer), потом отмечаем руками все плагины и для development, и для runtime.
+2. Ставим заново отсюда https://gstreamer.freedesktop.org/download/, MSVC 64-bit (VS 2019, Release CRT) оба варианта. При инсталляции нельзя выбирать full, потому что поставит неизвестно куда. Выбираем `custom`, выбираем путь (`c:\gstreamer`), потом отмечаем руками все плагины и для `development`, и для `runtime`.
 
 3. Примеры качаем одним архивом отсюда https://gitlab.freedesktop.org/gstreamer/gst-docs/, разворачиваем.
 
-4. Лезем в D:\CPP\gst-docs-master\examples\tutorials\vs2010\basic-tutorial-1, открываем там в блокноте файл vcxproj, ищем что-то, похожее на GSTREAMER_1_0_ROOT_X86_64, делаем переменную окружения с таким именем и значением C:\gstreamer\1.0\msvc_x86_64\. Зачем -- не ясно, но сделал.
+4. Лезем в `D:\CPP\gst-docs-master\examples\tutorials\vs2010\basic-tutorial-1`, открываем там в блокноте файл vcxproj, ищем что-то, похожее на `GSTREAMER_1_0_ROOT_X86_64`, делаем переменную окружения с таким именем и значением `C:\gstreamer\1.0\msvc_x86_64`\. Зачем -- не ясно, но сделал.
 
-5. Открываем проект, получивщийся в 3 пункте, в Visual studio (не в Qtcreator). Смотрим тут https://stackoverflow.com/questions/49294685/how-do-i-configure-visual-studio-2017-to-run-gstreamer-tutorials, как конфигурировать папки в свойствах проекта. Похоже, конфигурировать надо каждый проект отдельно, их там 14 *[Да, но руками надо добавлять только propery sheet, см. 26 июля]*.
+5. Открываем `basic-tutorial-1`, получившийся в 3 пункте, в Visual studio (не в Qtcreator). Смотрим тут https://stackoverflow.com/questions/49294685/how-do-i-configure-visual-studio-2017-to-run-gstreamer-tutorials, как конфигурировать папки в свойствах проекта (скопировано ниже), но на этом пункте ничего не конфигурируем, а идём в 6. 
 
-*[Все настройки добавлять через property sheets, см. 26 июля после картинки]*
+6. В Студии `view/other views/Property manager`, там находим нужный конфиг, то есть `Debug|x64`, потом контекстное меню `add new project property sheet`, добавляем лист `Gstreamer`, смотрим его `properties` и добавляем туда всё из пункта 5. Сохраняем. Гаечный ключ `Gstreamer` появляется в списке `sheets` самым верхним, т.е. он будет обрабатываться позже всех и иметь приоритет. Что в остальных листах -- не ясно. Теперь лезем на той же вкладке в `basic-tutorial-2` и добавляем `existing property sheet`, выбирая `Gstreamer`. После и первый, и второй пример нормально билдятся.
 
-  C/C++ -> Additional Include Directories ->
+     *C/C++ -> Additional Include Directories ->*
 
-  `C:\gstreamer\1.0\msvc_x86_64\lib\glib-2.0\include;C:\gstreamer\1.0\msvc_x86_64\include\gstreamer-1.0;C:\gstreamer\1.0\msvc_x86_64\include\glib-2.0\;C:\gstreamer\1.0\msvc_x86_64\include\glib-2.0\glib;%(AdditionalIncludeDirectories)`
+     *`C:\gstreamer\1.0\msvc_x86_64\lib\glib-2.0\include;C:\gstreamer\1.0\msvc_x86_64\include\gstreamer-1.0;C:\gstreamer\1.0\msvc_x86_64\include\glib-2.0\;C:\gstreamer\1.0\msvc_x86_64\include\glib-2.0\glib;%(AdditionalIncludeDirectories)`*
 
-  Linker -> General -> Adding Library Directories ->
+     *Linker -> General -> Adding Library Directories ->*
 
-  `C:\gstreamer\1.0\msvc_x86_64\lib;%(AdditionalLibraryDirectories)`
+     *`C:\gstreamer\1.0\msvc_x86_64\lib;%(AdditionalLibraryDirectories)`*
 
-  Linker -> Input -> Additional Dependencies ->
+     *Linker -> Input -> Additional Dependencies ->*
 
-  `gobject-2.0.lib;glib-2.0.lib;gstreamer-1.0.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)`
+     *`gobject-2.0.lib;glib-2.0.lib;gstreamer-1.0.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)`*
 
-  все или нет либы надо добавлять -- не ясно.
+     *все или нет либы надо добавлять -- не ясно.*
+
+   *Там же Linker / All options, ставим "Ignore All Default Libraries" No.*
 
 ###### 22 июля 2021
-
-Там же Linker / All options, ставим "Ignore All Default Libraries" No.
 
 Источник https://stackoverflow.com/questions/34572063/lnk2019unresolved-external-symbol-gstreamer-tutorials-visual-studio-2015
 
@@ -190,7 +189,7 @@ https://stackoverflow.com/questions/36467649/whats-wrong-with-this-gstreamer-pip
 
 ![QFPV показывает фильм, транслируемый FpvMVS](https://raw.githubusercontent.com/new-user-name/FlyingHippo/main/Images/QFPV_windows.png)
 
-Возвращаемся ко второму примеру Gstreamer (см. 23 июля). Туда надо каким-то образом экспортировать опции первого примера. В Студии `view/other views/Property manager`, там находим нужный конфиг, то есть `Debug|x64`, потом контекстное меню `add new project property sheet`, добавляем лист `Gstreamer`, смотрим его `properties` и добавляем туда руками всё из конфига 21 июля и начала 22 июля. Экспортировать как-то существующие настройки нельзя (наверное). Сохраняем. Гаечный ключ `Gstreamer` появляется в списке `sheets` самым верхним, т.е. он будет обрабатываться позже всех и иметь приоритет. Что в остальных листах -- не ясно. Теперь лезем на той же вкладке в `basic-tutorial-2` и добавляем `existing property sheet`, выбирая `Gstreamer`. После второй пример нормально билдится.
+Возвращаемся ко второму примеру Gstreamer (см. 23 июля). Туда надо каким-то образом экспортировать опции первого примера. 
 
 Разбор второго примера.
 
